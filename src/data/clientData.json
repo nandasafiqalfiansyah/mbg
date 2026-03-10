@@ -1,38 +1,38 @@
 [
     {
         "index": 1,
-        "name": "John Smith",
-        "role": "Marketing dierector at XYZ",
-        "comment": "We have been working with Positivus for the past year and have seen a significant increase in website traffic and leads as a result of their efforts. The team is professional, responsive, and truly cares about the success of our business. We highly recommend Positivus to any company looking to grow their online presence."
+        "name": "Rina Maharani",
+        "role": "Petani Sayur - Lembang",
+        "comment": "Sejak memakai PanenLangsung, saya bisa menjual panen harian langsung ke pelanggan tetap tanpa harus menunggu tengkulak."
     },
     {
         "index": 2,
-        "name": "Jane Doe",
-        "role": "CEO at ABC",
-        "comment": "We chose Positivus to help us with our SEO and PPC campaigns and have been very impressed with their results. They are knowledgeable, responsive, and truly care about the success of our business. We highly recommend Positivus to any company looking to grow their online presence."
+        "name": "Ardiansyah Putra",
+        "role": "Konsumen - Jakarta",
+        "comment": "Harga produk lebih transparan dan kualitas sayur yang saya terima lebih segar karena dikirim langsung dari petani."
     },
     {
         "index": 3,
-        "name": "Alice Johnson",
-        "role": "Owner at 123",
-        "comment": "I recently started working with Positivus and have been very impressed with their professionalism and expertise. They have helped me increase my online visibility and generate more leads for my business. I highly recommend Positivus to anyone looking to improve their online marketing strategy."
+        "name": "Siti Rahmawati",
+        "role": "Petani Buah - Malang",
+        "comment": "Fitur langganan mingguan membantu kami memperkirakan permintaan, jadi panen lebih terencana dan minim produk terbuang."
     },
     {
         "index": 4,
-        "name": "Bob Brown",
-        "role": "Dierector at XYZ",
-        "comment": "Positivus has been a great partner for our company. They are knowledgeable, responsive, and truly care about the success of our business. We have seen a significant increase in website traffic and leads as a result of their efforts. I highly recommend Positivus to any company looking to grow their online presence."
+        "name": "Dewi Lestari",
+        "role": "Pemilik UMKM Kuliner - Depok",
+        "comment": "Saya bisa membeli bahan baku langsung dari petani yang sama setiap minggu, kualitas stabil dan biaya operasional lebih terkendali."
     },
     {
         "index": 5,
-        "name": "Gupta Patel",
-        "role": "Content creator",
-        "comment": "I have been working with Positivus for the past year and have been very impressed with their professionalism and expertise. They have helped me increase my online visibility and generate more leads for my business. I highly recommend Positivus to anyone looking to improve their online marketing strategy."
+        "name": "Yusuf Kurniawan",
+        "role": "Petani Cabai - Magelang",
+        "comment": "Data permintaan di dashboard membantu saya menentukan harga dan volume panen dengan lebih percaya diri."
     },
     {
         "index": 6,
-        "name": "Sara Johnson",
-        "role": "Freelancer",
-        "comment": "Positivus made a huge difference in our online presence. They are knowledgeable, responsive, and truly care about the success of our business. We have seen a significant increase in website traffic and leads as a result of their efforts. I highly recommend Positivus to any company looking to grow their online presence."
+        "name": "Novi Andriani",
+        "role": "Konsumen - Surabaya",
+        "comment": "Pelacakan pengiriman jelas, jadi saya tahu kapan produk tiba. Belanja bahan segar sekarang jauh lebih praktis."
     }
 ]

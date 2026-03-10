@@ -1,0 +1,85 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+---
+
+<MainLayout
+  title="Autentikasi | PanenLangsung"
+  description="Memproses autentikasi pengguna PanenLangsung."
+>
+  <section class="px-5 py-24 sm:py-28">
+    <div class="w-full max-w-[1240px] mx-auto">
+      <div class="max-w-xl mx-auto bg-[#F3F3F3] rounded-[30px] border border-black/10 p-8 sm:p-10 mt-16 text-center">
+        <h1 class="text-3xl font-medium mb-3">Memproses Login...</h1>
+        <div id="callback-message" class="rounded-[14px] border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-700" role="status" aria-live="polite">Mohon tunggu, kami sedang menyelesaikan autentikasi akun Anda.</div>
+      </div>
+    </div>
+  </section>
+
+  <script type="module">
+    import { createClient } from "@supabase/supabase-js";
+
+    const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+    const supabaseKey = import.meta.env.PUBLIC_SUPABASE_KEY;
+    const AUTH_COOKIE = "pl_auth";
+    const messageEl = document.getElementById("callback-message");
+
+    function showNotice(type, message) {
+      if (!messageEl) return;
+
+      const classes = {
+        success: "rounded-[14px] border border-emerald-300 bg-emerald-50 px-4 py-3 text-sm text-emerald-800",
+        error: "rounded-[14px] border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700",
+        info: "rounded-[14px] border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-700",
+      };
+
+      messageEl.className = classes[type] || classes.info;
+      messageEl.textContent = message;
+    }
+
+    async function persistAuthCookie() {
+      try {
+        await fetch("/api/session", { method: "POST" });
+      } catch {
+        // Fallback to client cookie when API is not reachable.
+      }
+      document.cookie = `${AUTH_COOKIE}=1; Path=/; Max-Age=86400; SameSite=Lax`;
+    }
+
+    async function runAuthCallback() {
+      if (!supabaseUrl || !supabaseKey) {
+        showNotice("error", "Konfigurasi Supabase belum tersedia.");
+        return;
+      }
+
+      const supabase = createClient(supabaseUrl, supabaseKey);
+      const url = new URL(window.location.href);
+      const authCode = url.searchParams.get("code");
+
+      if (authCode) {
+        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(authCode);
+
+        if (exchangeError) {
+          showNotice("error", `Gagal autentikasi Google: ${exchangeError.message}`);
+          return;
+        }
+      }
+
+      const { data, error } = await supabase.auth.getSession();
+
+      if (error) {
+        showNotice("error", `Gagal mendapatkan sesi login: ${error.message}`);
+        return;
+      }
+
+      if (!data.session) {
+        showNotice("error", "Sesi Google tidak ditemukan. Pastikan Google OAuth dan Redirect URL di Supabase sudah benar.");
+        return;
+      }
+
+      await persistAuthCookie();
+      window.location.href = "/dashboard";
+    }
+
+    runAuthCallback();
+  </script>
+</MainLayout>

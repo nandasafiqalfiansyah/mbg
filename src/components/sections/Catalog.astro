@@ -1,0 +1,88 @@
+---
+import Section from "./Section.astro";
+import SectionTitle from "../ui/SectionTitle.astro";
+import { Image } from "astro:assets";
+import { getCatalogFilters, getCatalogProducts } from "../../data/catalogDb";
+
+const description =
+  "Belanja hasil panen segar langsung dari petani lokal. Harga ditampilkan transparan per satuan, lengkap dengan informasi asal kebun, jadwal panen, dan estimasi pengiriman.";
+
+const filters = getCatalogFilters();
+const products = getCatalogProducts();
+---
+
+<Section id="catalog">
+  <div class="mt-[140px] mb-8 rounded-[34px] border border-black p-6 sm:p-8 lg:p-10 bg-gradient-to-br from-lime-50 via-white to-emerald-50">
+    <SectionTitle sectionTitle="Katalog Produk" description={description} />
+
+    <div class="mb-10 flex flex-wrap gap-3 justify-center sm:justify-start">
+      {
+        filters.map((filter, index) => (
+          <button
+            class={`rounded-full border border-black px-5 py-2 text-sm transition-colors ${
+              index === 0 ? "bg-black text-white" : "bg-white hover:bg-gray-100"
+            }`}
+            type="button"
+          >
+            {filter}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+      {
+        products.map((product) => (
+          <article class="group rounded-3xl border border-black bg-white p-4 shadow-[0_12px_30px_rgba(0,0,0,0.06)] transition-transform hover:-translate-y-1">
+            <div class="relative mb-4 overflow-hidden rounded-2xl border border-black/10 bg-zinc-100">
+              <Image
+                src={product.image}
+                alt={product.name}
+                class="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                loading="lazy"
+              />
+              <span class="absolute left-3 top-3 rounded-full bg-black px-3 py-1 text-xs text-white">
+                {product.category}
+              </span>
+            </div>
+
+            <div class="space-y-2">
+              <h3 class="text-xl font-medium leading-tight">{product.name}</h3>
+              <p class="text-sm text-zinc-600">Petani: {product.farmer}</p>
+            </div>
+
+            <div class="my-4 grid grid-cols-2 gap-2 rounded-2xl bg-zinc-50 p-3 text-sm">
+              <p class="text-zinc-600">Asal</p>
+              <p class="text-right font-medium text-zinc-800">{product.location}</p>
+              <p class="text-zinc-600">Stok</p>
+              <p class="text-right font-medium text-zinc-800">{product.stock}</p>
+              <p class="text-zinc-600">Panen</p>
+              <p class="text-right font-medium text-zinc-800">{product.harvest}</p>
+            </div>
+
+            <div class="flex items-center justify-between border-t border-black/10 pt-4">
+              <div>
+                <p class="text-sm text-zinc-600">Harga mulai</p>
+                <p class="text-2xl font-semibold">
+                  {product.price}
+                  <span class="text-base font-normal text-zinc-600">{product.unit}</span>
+                </p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-zinc-600">Rating</p>
+                <p class="text-lg font-medium">{product.rating}/5</p>
+              </div>
+            </div>
+
+            <a
+              href="/login"
+              class="mt-4 inline-flex w-full items-center justify-center rounded-2xl bg-black px-4 py-3 text-sm text-white transition-colors hover:bg-zinc-800"
+            >
+              Pesan Langsung
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</Section>

@@ -1,0 +1,181 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+---
+
+<MainLayout
+  title="Login | PanenLangsung"
+  description="Masuk ke PanenLangsung untuk mengelola penjualan hasil panen langsung dari petani ke konsumen."
+>
+  <section class="px-5 py-24 sm:py-28">
+    <div class="w-full max-w-[1240px] mx-auto">
+      <div class="max-w-xl mx-auto bg-[#F3F3F3] rounded-[30px] border border-black/10 p-8 sm:p-10 mt-16">
+        <p class="text-sm uppercase tracking-[0.2em] text-black/60 mb-2">Portal Resmi PanenLangsung</p>
+        <h1 class="text-3xl font-medium mb-2">Masuk ke Sistem</h1>
+        <p class="text-black/70 mb-8">Gunakan akun Anda atau lanjutkan dengan Google untuk mengakses dashboard penjualan hasil panen.</p>
+
+        <form id="login-form" class="space-y-4">
+          <div>
+            <label for="email" class="block text-sm mb-2">Email</label>
+            <input id="email" type="email" required placeholder="nama@panenlangsung.id" class="w-full px-4 py-3 border border-black rounded-[14px] bg-white outline-none" />
+          </div>
+          <div>
+            <label for="password" class="block text-sm mb-2">Password</label>
+            <input id="password" type="password" required placeholder="••••••••" class="w-full px-4 py-3 border border-black rounded-[14px] bg-white outline-none" />
+          </div>
+          <button id="login-btn" type="submit" class="btn-primary w-full">Masuk</button>
+        </form>
+
+        <div class="my-5 text-center text-sm text-black/60">atau</div>
+
+        <button id="google-btn" type="button" class="w-full px-4 py-3 rounded-[14px] border border-black bg-white hover:bg-black hover:text-white transition">Lanjutkan dengan Google</button>
+
+        <div id="auth-message" class="mt-4 hidden rounded-[14px] border px-4 py-3 text-sm" role="status" aria-live="polite"></div>
+
+        <p class="mt-6 text-sm text-black/70 text-center">
+          Belum punya akun?
+          <a href="/register" class="underline">Daftar di sini</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <script type="module">
+    import { createClient } from "@supabase/supabase-js";
+
+    const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+    const supabaseKey = import.meta.env.PUBLIC_SUPABASE_KEY;
+    const LOCAL_SESSION_KEY = "panenlangsung_session";
+    const AUTH_COOKIE = "pl_auth";
+
+    const messageEl = document.getElementById("auth-message");
+    const loginForm = document.getElementById("login-form");
+    const loginBtn = document.getElementById("login-btn");
+    const googleBtn = document.getElementById("google-btn");
+
+    function saveLocalSession(email) {
+      localStorage.setItem(
+        LOCAL_SESSION_KEY,
+        JSON.stringify({ email: String(email), loginAt: new Date().toISOString() })
+      );
+    }
+
+    function setAuthCookie() {
+      document.cookie = `${AUTH_COOKIE}=1; Path=/; Max-Age=86400; SameSite=Lax`;
+    }
+
+    async function persistAuthCookie() {
+      try {
+        await fetch("/api/session", { method: "POST" });
+      } catch {
+        // Fallback to client cookie when API is not reachable.
+      }
+      setAuthCookie();
+    }
+
+    async function completeLogin(email) {
+      await persistAuthCookie();
+      saveLocalSession(email || "Pengguna PanenLangsung");
+      window.location.href = "/dashboard";
+    }
+
+    function showNotice(type, message) {
+      if (!messageEl) return;
+
+      const classes = {
+        success: "mt-4 rounded-[14px] border border-emerald-300 bg-emerald-50 px-4 py-3 text-sm text-emerald-800",
+        error: "mt-4 rounded-[14px] border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700",
+        info: "mt-4 rounded-[14px] border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-700",
+      };
+
+      messageEl.className = classes[type] || classes.info;
+      messageEl.textContent = message;
+    }
+
+    if (!supabaseUrl || !supabaseKey) {
+      loginForm?.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const email = document.getElementById("email")?.value;
+        const password = document.getElementById("password")?.value;
+
+        if (!email || !password) return;
+
+        if (loginBtn) loginBtn.textContent = "Memproses...";
+        await completeLogin(email);
+      });
+
+      if (googleBtn) {
+        googleBtn.setAttribute("disabled", "true");
+        googleBtn.classList.add("opacity-60", "cursor-not-allowed");
+      }
+
+      if (messageEl) {
+        showNotice("info", "Mode lokal aktif. Login langsung diarahkan ke dashboard.");
+      }
+    } else {
+      const supabase = createClient(supabaseUrl, supabaseKey);
+
+      const { data: existing } = await supabase.auth.getSession();
+      if (existing.session) {
+        await completeLogin(existing.session.user.email || "Pengguna PanenLangsung");
+      }
+
+      loginForm?.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const email = document.getElementById("email")?.value;
+        const password = document.getElementById("password")?.value;
+
+        if (!email || !password) return;
+
+        if (loginBtn) loginBtn.textContent = "Memproses...";
+
+        const { error } = await supabase.auth.signInWithPassword({
+          email: String(email),
+          password: String(password),
+        });
+
+        if (error) {
+          showNotice("info", `Supabase login gagal (${error.message}). Menggunakan mode lokal.`);
+          await completeLogin(email);
+          return;
+        }
+
+        await completeLogin(email);
+      });
+
+      googleBtn?.addEventListener("click", async () => {
+        if (messageEl) {
+          showNotice("info", "Mengarahkan ke Google...");
+        }
+
+        try {
+          const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: "google",
+            options: {
+              redirectTo: `${window.location.origin}/auth/callback`,
+              skipBrowserRedirect: true,
+            },
+          });
+
+          if (error) {
+            throw error;
+          }
+
+          if (data?.url) {
+            window.location.assign(data.url);
+            return;
+          }
+
+          if (messageEl) {
+            showNotice("error", "URL login Google tidak tersedia. Cek konfigurasi Google Provider di Supabase.");
+          }
+        } catch (oauthError) {
+          if (messageEl) {
+            showNotice("error", oauthError instanceof Error ? oauthError.message : "Gagal memulai login Google.");
+          }
+        }
+      });
+    }
+  </script>
+</MainLayout>

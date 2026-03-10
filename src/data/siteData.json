@@ -1,8 +1,8 @@
 {
-  "title": "Positivus",
-  "description": "Positivus is a simple and minimalistic blog theme for Ghost. It is designed to be a perfect starting point for your blog project.",
+  "title": "PanenLangsung",
+  "description": "PanenLangsung adalah platform penjualan langsung dari petani ke konsumen untuk memudahkan transaksi hasil panen segar secara adil dan transparan.",
   "image": {
     "src": "https://github.com/manulthanura/Positivus/raw/main/public/cover.png",
-    "alt": "Positivus"
+    "alt": "PanenLangsung"
   }
 }

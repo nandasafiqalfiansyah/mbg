@@ -1,0 +1,80 @@
+[
+    {
+        "id": "prd-001",
+        "name": "Cabai Merah Keriting",
+        "category": "Rempah",
+        "price": "Rp32.000",
+        "unit": "/kg",
+        "stock": "58 kg",
+        "location": "Magelang, Jawa Tengah",
+        "harvest": "Panen hari ini",
+        "farmer": "Pak Suraji",
+        "rating": "4.9",
+        "imageKey": "card-pic1"
+    },
+    {
+        "id": "prd-002",
+        "name": "Tomat Organik Premium",
+        "category": "Sayuran",
+        "price": "Rp18.500",
+        "unit": "/kg",
+        "stock": "74 kg",
+        "location": "Bandung Barat, Jawa Barat",
+        "harvest": "Panen 1 hari lalu",
+        "farmer": "Bu Ratih",
+        "rating": "4.8",
+        "imageKey": "card-pic2"
+    },
+    {
+        "id": "prd-003",
+        "name": "Beras Merah Lembut",
+        "category": "Beras",
+        "price": "Rp23.000",
+        "unit": "/kg",
+        "stock": "210 kg",
+        "location": "Sleman, Yogyakarta",
+        "harvest": "Giling minggu ini",
+        "farmer": "Kelompok Tani Makmur",
+        "rating": "4.7",
+        "imageKey": "card-pic3"
+    },
+    {
+        "id": "prd-004",
+        "name": "Jeruk Keprok Manis",
+        "category": "Buah",
+        "price": "Rp21.000",
+        "unit": "/kg",
+        "stock": "92 kg",
+        "location": "Batu, Jawa Timur",
+        "harvest": "Panen hari ini",
+        "farmer": "Pak Harun",
+        "rating": "4.9",
+        "imageKey": "card-pic4"
+    },
+    {
+        "id": "prd-005",
+        "name": "Bayam Hijau Segar",
+        "category": "Sayuran",
+        "price": "Rp8.000",
+        "unit": "/ikat",
+        "stock": "140 ikat",
+        "location": "Bogor, Jawa Barat",
+        "harvest": "Panen pagi ini",
+        "farmer": "Bu Intan",
+        "rating": "4.8",
+        "imageKey": "card-pic5"
+    },
+    {
+        "id": "prd-006",
+        "name": "Paket Panen Keluarga",
+        "category": "Paket Mingguan",
+        "price": "Rp129.000",
+        "unit": "/paket",
+        "stock": "35 paket",
+        "location": "Klaten, Jawa Tengah",
+        "harvest": "Kurasi mingguan",
+        "farmer": "Koperasi Tunas Tani",
+        "rating": "5.0",
+        "imageKey": "card-pic6"
+    }
+]
